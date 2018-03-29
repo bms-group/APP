@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private void getTest() {
         //https://www.apiopen.top/weatherApi?city=成都
         RequestParams params = new RequestParams("https://www.apiopen.top/weatherApi");
-        params.addParameter("city", "成都");
+        params.addQueryStringParameter("city", "成都");
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
