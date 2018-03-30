@@ -1,5 +1,6 @@
 package com.asyf.app.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
                 Logger.e(TAG, "点击登录按钮");
                 Toast.makeText(LoginActivity.this, "点击了登录", Toast.LENGTH_SHORT).show();
                 getTest();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
