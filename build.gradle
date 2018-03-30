@@ -25,4 +25,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+//引用属性文件
 apply from: rootProject.file('dependencies.gradle')

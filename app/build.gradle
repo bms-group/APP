@@ -27,6 +27,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'org.xutils:xutils:3.3.36'
     compile 'com.qmuiteam:qmui:1.0.6'
+    //时间插件引用
     //compile 'com.prolificinteractive:material-calendarview:1.4.0'
+    //时间插件源码引用（不使用上面的引用）
     implementation project(':material-calendarview')
 }
