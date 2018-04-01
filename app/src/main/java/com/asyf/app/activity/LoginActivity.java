@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Logger.e(TAG, "点击登录按钮");
                 Toast.makeText(LoginActivity.this, "点击了登录", Toast.LENGTH_SHORT).show();
-                getTest();
+                //getTest();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
