@@ -105,7 +105,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 .setFirstSelectedPosition(0)
                 .initialise();
         final FragmentManager fragmentManager = getSupportFragmentManager();
-
+        //初始化主页
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        HomeFragment homeFragment = new HomeFragment();
+        fragmentTransaction.replace(R.id.ly_content, homeFragment);
+        fragmentTransaction.commit();
         //点击回调
         bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override

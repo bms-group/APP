@@ -37,7 +37,7 @@
         android:id="@+id/ly_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/qmui_config_color_gray_9"
         android:layout_above="@+id/bottom_navigation_bar"
         android:layout_below="@+id/qmui_top_bar"></FrameLayout>
 

@@ -1,16 +1,29 @@
 package com.asyf.app.fragment;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.asyf.app.R;
+import com.asyf.app.activity.ListActivity;
+import com.asyf.app.common.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
-
+    private final String TAG = "HomeFragment";
     private String content = "12ss";
 
     public HomeFragment() {
@@ -23,5 +36,20 @@ public class HomeFragment extends Fragment {
         //TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
         //txt_content.setText(content);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final FragmentActivity activity = getActivity();
+        Button button = activity.findViewById(R.id.swipe_refresh);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.e(TAG, "点击碎片中的按钮");
+                Intent intent = new Intent(activity, ListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
