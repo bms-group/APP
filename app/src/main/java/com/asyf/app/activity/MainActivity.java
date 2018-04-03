@@ -18,6 +18,8 @@ import com.asyf.app.R;
 import com.asyf.app.common.Logger;
 import com.asyf.app.fragment.HomeFragment;
 import com.asyf.app.fragment.MyFragment;
+import com.asyf.app.fragment.PlanFragment;
+import com.asyf.app.fragment.ScheduleFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarUtils;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -37,12 +39,19 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
-    CalendarDay currentDate;//自定义的日期对象
+
+    private CalendarDay currentDate;//自定义的日期对象
+    private HomeFragment homeFragment;
+    private ScheduleFragment scheduleFragment;
+    private PlanFragment planFragment;
+    private MyFragment myFragment;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
         //日历
         //initCalendar();
 
@@ -51,6 +60,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         //底部导航
         initButtom();
+    }
+
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+        Logger.e("aa", "saasahduiqyd78t7e2t测试");
+        Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
+        currentDate = date;
+
     }
 
     private void initToolBar() {
@@ -93,40 +110,61 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         });
     }*/
 
+    //底部导航栏
     private void initButtom() {
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
-        bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.test, "Home").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "Books").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "Music").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "Movies & TV").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "Games").setActiveColorResource(R.color.qmui_config_color_blue))
+        bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_DEFAULT);
+        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.test, "通知").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "课程").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "提醒").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "我的").setActiveColorResource(R.color.qmui_config_color_blue))
                 .setFirstSelectedPosition(0)
                 .initialise();
-        final FragmentManager fragmentManager = getSupportFragmentManager();
         //初始化主页
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomeFragment homeFragment = new HomeFragment();
-        fragmentTransaction.replace(R.id.ly_content, homeFragment);
-        fragmentTransaction.commit();
+        setDefaultFragment();
+
         //点击回调
         bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
+                //显示碎片
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
+                //隐藏所有
+                hideAllFragment(fragmentTransaction);
+                //Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
-                        HomeFragment homeFragment = new HomeFragment();
-                        fragmentTransaction.replace(R.id.ly_content, homeFragment);
+                        if (homeFragment == null) {
+                            homeFragment = new HomeFragment();
+                            fragmentTransaction.add(R.id.ly_content, homeFragment);
+                        } else {
+                            fragmentTransaction.show(homeFragment);
+                        }
                         break;
                     case 1:
-                        //fg_content fg_content = com.asyf.app.fragment.fg_content.newInstance("p1", "p2");
-                        MyFragment myFragment = new MyFragment();
-                        fragmentTransaction.replace(R.id.ly_content, myFragment);
+                        if (scheduleFragment == null) {
+                            scheduleFragment = new ScheduleFragment();
+                            fragmentTransaction.add(R.id.ly_content, scheduleFragment);
+                        } else {
+                            fragmentTransaction.show(scheduleFragment);
+                        }
                         break;
                     case 2:
+                        if (planFragment == null) {
+                            planFragment = new PlanFragment();
+                            fragmentTransaction.add(R.id.ly_content, planFragment);
+                        } else {
+                            fragmentTransaction.show(planFragment);
+                        }
+                        break;
+                    case 3:
+                        if (myFragment == null) {
+                            myFragment = new MyFragment();
+                            fragmentTransaction.add(R.id.ly_content, myFragment);
+                        } else {
+                            fragmentTransaction.show(myFragment);
+                        }
                         break;
                     default:
                         Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
@@ -147,14 +185,23 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         });
     }
 
-
-    @Override
-    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-        Logger.e("aa", "saasahduiqyd78t7e2t测试");
-        Toast.makeText(MainActivity.this, "点击", Toast.LENGTH_SHORT).show();
-        currentDate = date;
-
+    //隐藏所有Fragment
+    private void hideAllFragment(FragmentTransaction fragmentTransaction) {
+        if (homeFragment != null) fragmentTransaction.hide(homeFragment);
+        if (scheduleFragment != null) fragmentTransaction.hide(scheduleFragment);
+        if (planFragment != null) fragmentTransaction.hide(planFragment);
+        if (myFragment != null) fragmentTransaction.hide(myFragment);
     }
+
+    //设置默认碎片
+    private void setDefaultFragment() {
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        homeFragment = new HomeFragment();
+        fragmentTransaction.add(R.id.ly_content, homeFragment);
+        fragmentTransaction.commit();
+    }
+
 
     /**
      * 获取点击后的日期数
@@ -172,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
+    //日历插件
     public class EventDecorator implements DayViewDecorator {
 
         private int color;
