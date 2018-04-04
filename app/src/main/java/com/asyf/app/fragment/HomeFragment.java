@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.asyf.app.R;
 import com.asyf.app.activity.ListActivity;
+import com.asyf.app.activity.LoginTestActivity;
 import com.asyf.app.common.Logger;
 
 import java.util.ArrayList;
@@ -48,6 +49,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Logger.e(TAG, "点击碎片中的按钮");
                 Intent intent = new Intent(activity, ListActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button test = activity.findViewById(R.id.test);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, LoginTestActivity.class);
                 startActivity(intent);
             }
         });
