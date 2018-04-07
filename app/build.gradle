@@ -34,4 +34,6 @@ dependencies {
     implementation project(':material-calendarview')
     //底部导航栏插件
     compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
+    //圆角图片插件
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
