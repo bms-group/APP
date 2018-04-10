@@ -14,11 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asyf.app.R;
 import com.asyf.app.activity.ListActivity;
 import com.asyf.app.activity.LoginTestActivity;
 import com.asyf.app.common.Logger;
+import com.asyf.app.jni.JniTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(activity, LoginTestActivity.class);
                 startActivity(intent);
+            }
+        });
+        Button jtc = activity.findViewById(R.id.javatoc);
+        jtc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String result = new JniTest().getStrFromC();
+                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -15,6 +15,14 @@ android {
     lintOptions {
         abortOnError false
     }
+    //自己增加的，在app中引入了sourceSets，在这个项目没有这个配置就会报错
+    buildTypes {
+        sourceSets {
+            main {
+                jni.srcDirs = []
+            }
+        }
+    }
 }
 
 dependencies {
@@ -46,6 +54,5 @@ android.libraryVariants.all { variant ->
         }
     }
 }
-
 
 //apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
