@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.asyf.app.R;
 import com.asyf.app.activity.ListActivity;
 import com.asyf.app.activity.LoginTestActivity;
+import com.asyf.app.activity.VideoPlayerActivity;
 import com.asyf.app.common.Logger;
 import com.asyf.app.jni.JniTest;
 
@@ -68,6 +69,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 String result = new JniTest().getStrFromC();
                 Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
+            }
+        });
+        Button jiecao = activity.findViewById(R.id.jiaozi);
+        jiecao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, VideoPlayerActivity.class);
+                startActivity(intent);
             }
         });
     }

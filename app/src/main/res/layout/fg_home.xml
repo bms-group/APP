@@ -21,5 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="JAVA TO C" />
+
+    <Button
+        android:id="@+id/jiaozi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="jiaozivideoplayer" />
     
 </LinearLayout>

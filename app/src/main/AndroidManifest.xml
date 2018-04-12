@@ -23,7 +23,11 @@
         </activity>
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ListActivity" />
-        <activity android:name=".activity.LoginTestActivity"></activity>
+        <activity android:name=".activity.LoginTestActivity" />
+        <activity
+            android:name=".activity.VideoPlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

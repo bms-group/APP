@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.asyf.app"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -52,4 +52,6 @@ dependencies {
     compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
     //圆角图片插件
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //视频播放器插件
+    compile 'cn.jzvd:jiaozivideoplayer:6.0.1'
 }
