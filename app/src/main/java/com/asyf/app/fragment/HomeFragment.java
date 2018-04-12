@@ -139,8 +139,8 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(activity, "点击了更新", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         //下载文件
-                        //downloadNewVersion(activity);
-                        downLoad2(activity);
+                        downloadNewVersion(activity);
+                        //downLoad2(activity);
                     }
                 }).show();
             }
@@ -207,6 +207,7 @@ public class HomeFragment extends Fragment {
                     int len;
                     int total = 0;
                     while ((len = bis.read(buffer)) != -1) {
+                        sleep(1);
                         fos.write(buffer, 0, len);
                         total += len;
                         // 获取当前下载量
