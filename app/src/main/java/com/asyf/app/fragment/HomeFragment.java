@@ -229,7 +229,7 @@ public class HomeFragment extends Fragment {
         }.start();
     }
 
-    private void downloadNewVersion(FragmentActivity activity) {
+    private void downloadNewVersion(final FragmentActivity activity) {
 
         String url = "http://192.168.0.130:8080/mtest/testDownload";
         RequestParams params = new RequestParams(url);
@@ -265,6 +265,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                pd.dismiss();
+                Toast.makeText(activity, "网络连接失败！", Toast.LENGTH_SHORT).show();
             }
 
             @Override
