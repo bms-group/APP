@@ -27,5 +27,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="jiaozivideoplayer" />
-    
+
+    <Button
+        android:id="@+id/check_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="检测更新" />
+
+    <Button
+        android:id="@+id/file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="写入文件" />
+
 </LinearLayout>
