@@ -54,4 +54,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     //视频播放器插件
     compile 'cn.jzvd:jiaozivideoplayer:6.0.1'
+    //PDF阅读
+    compile 'com.github.barteksc:android-pdf-viewer:2.7.0-beta.1'
 }

@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.asyf.app.R;
 import com.asyf.app.activity.ListActivity;
 import com.asyf.app.activity.LoginTestActivity;
+import com.asyf.app.activity.PdfViewerActivity;
 import com.asyf.app.activity.VideoPlayerActivity;
 import com.asyf.app.common.Logger;
 import com.asyf.app.jni.JniTest;
@@ -170,6 +171,14 @@ public class HomeFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+        Button pdf = activity.findViewById(R.id.pdf);
+        pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, PdfViewerActivity.class);
+                startActivity(intent);
             }
         });
     }
