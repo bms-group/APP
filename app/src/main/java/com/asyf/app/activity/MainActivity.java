@@ -20,6 +20,7 @@ import com.asyf.app.fragment.HomeFragment;
 import com.asyf.app.fragment.MyFragment;
 import com.asyf.app.fragment.PlanFragment;
 import com.asyf.app.fragment.ScheduleFragment;
+import com.asyf.app.fragment.TestFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarUtils;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private PlanFragment planFragment;
     private MyFragment myFragment;
     private FragmentManager fragmentManager;
+    private TestFragment testFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 .addItem(new BottomNavigationItem(R.mipmap.test, "课程").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.test, "提醒").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.test, "我的").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "测试").setActiveColorResource(R.color.qmui_config_color_blue))
                 .setFirstSelectedPosition(0)
                 .initialise();
         //初始化主页
@@ -166,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                             fragmentTransaction.show(myFragment);
                         }
                         break;
+                    case 4:
+                        if (testFragment == null) {
+                            testFragment = new TestFragment();
+                            fragmentTransaction.add(R.id.ly_content, testFragment);
+                        } else {
+                            fragmentTransaction.show(testFragment);
+                        }
                     default:
                         Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
                         break;
@@ -191,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         if (scheduleFragment != null) fragmentTransaction.hide(scheduleFragment);
         if (planFragment != null) fragmentTransaction.hide(planFragment);
         if (myFragment != null) fragmentTransaction.hide(myFragment);
+        if (testFragment != null) fragmentTransaction.hide(testFragment);
     }
 
     //设置默认碎片
