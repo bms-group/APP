@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.asyf.app.R;
 import com.asyf.app.adapter.MyAdapter;
 import com.asyf.app.entity.Icon;
+import com.asyf.app.observe.EventBadgeItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class TestFragment extends Fragment {
     private GridView grid_photo;
     private BaseAdapter mAdapter = null;
     private ArrayList<Icon> mData = null;
+    private int count = 0;
 
     public TestFragment() {
         // Required empty public constructor
@@ -72,6 +74,7 @@ public class TestFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(activity, "你点击了~" + position + "~项", Toast.LENGTH_SHORT).show();
+                EventBadgeItem.getInstance().post(String.valueOf(count++));
             }
         });
     }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.asyf.app.R;
 import com.asyf.app.common.Logger;
 import com.asyf.app.fragment.HomeFragment;
@@ -21,6 +22,7 @@ import com.asyf.app.fragment.MyFragment;
 import com.asyf.app.fragment.PlanFragment;
 import com.asyf.app.fragment.ScheduleFragment;
 import com.asyf.app.fragment.TestFragment;
+import com.asyf.app.observe.EventBadgeItem;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarUtils;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -37,9 +39,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
+public class MainActivity extends AppCompatActivity implements OnDateSelectedListener, Observer {
 
     private CalendarDay currentDate;//自定义的日期对象
     private HomeFragment homeFragment;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private MyFragment myFragment;
     private FragmentManager fragmentManager;
     private TestFragment testFragment;
+    private TextBadgeItem badgeItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,14 +119,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     //底部导航栏
     private void initButtom() {
+        EventBadgeItem.getInstance().register(this);//观察者注册
+        badgeItem = new TextBadgeItem();
+        badgeItem.setHideOnSelect(false)
+                .setText("10")
+                .setBorderWidth(0);
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_DEFAULT);
         bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.test, "通知").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "课程").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "课程").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.test, "提醒").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.test, "我的").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "测试").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "测试").setActiveColorResource(R.color.qmui_config_color_blue).setBadgeItem(badgeItem))
                 .setFirstSelectedPosition(0)
                 .initialise();
         //初始化主页
@@ -228,6 +238,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }
 
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof String) {
+            badgeItem.setText((String) arg);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBadgeItem.getInstance().unregister(this);//取消注册
     }
 
     //日历插件
