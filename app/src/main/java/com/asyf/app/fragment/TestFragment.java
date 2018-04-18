@@ -2,6 +2,7 @@ package com.asyf.app.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.asyf.app.R;
+import com.asyf.app.activity.RecyclerviewActivity;
 import com.asyf.app.adapter.MyAdapter;
 import com.asyf.app.entity.Icon;
 import com.asyf.app.observe.EventBadgeItem;
@@ -31,6 +33,7 @@ public class TestFragment extends Fragment {
     private BaseAdapter mAdapter = null;
     private ArrayList<Icon> mData = null;
     private int count = 0;
+    private FragmentActivity activity;
 
     public TestFragment() {
         // Required empty public constructor
@@ -47,19 +50,19 @@ public class TestFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final FragmentActivity activity = getActivity();
+        activity = getActivity();
         Toast.makeText(activity, "sss", Toast.LENGTH_SHORT).show();
         grid_photo = activity.findViewById(R.id.grid_photo);
         mData = new ArrayList<Icon>();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new Icon(R.mipmap.iv_icon_1, "图标1"));
-            mData.add(new Icon(R.mipmap.iv_icon_2, "图标2"));
-            mData.add(new Icon(R.mipmap.iv_icon_3, "图标3"));
-            mData.add(new Icon(R.mipmap.iv_icon_4, "图标4"));
-            mData.add(new Icon(R.mipmap.iv_icon_5, "图标5"));
-            mData.add(new Icon(R.mipmap.iv_icon_6, "图标6"));
-            mData.add(new Icon(R.mipmap.iv_icon_7, "图标7"));
-        }
+        //for (int i = 0; i < 10; i++) {
+        mData.add(new Icon(R.mipmap.iv_icon_1, "RecyclerView"));
+        mData.add(new Icon(R.mipmap.iv_icon_2, "图标2"));
+        mData.add(new Icon(R.mipmap.iv_icon_3, "图标3"));
+        mData.add(new Icon(R.mipmap.iv_icon_4, "图标4"));
+        mData.add(new Icon(R.mipmap.iv_icon_5, "图标5"));
+        mData.add(new Icon(R.mipmap.iv_icon_6, "图标6"));
+        mData.add(new Icon(R.mipmap.iv_icon_7, "图标7"));
+        //}
         mAdapter = new MyAdapter<Icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, Icon obj) {
@@ -75,6 +78,14 @@ public class TestFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(activity, "你点击了~" + position + "~项", Toast.LENGTH_SHORT).show();
                 EventBadgeItem.getInstance().post(String.valueOf(count++));
+                switch (position) {
+                    case 0:
+                        Intent intent = new Intent(activity, RecyclerviewActivity.class);
+                        activity.startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
