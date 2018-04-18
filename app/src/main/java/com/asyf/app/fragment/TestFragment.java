@@ -51,7 +51,7 @@ public class TestFragment extends Fragment {
         Toast.makeText(activity, "sss", Toast.LENGTH_SHORT).show();
         grid_photo = activity.findViewById(R.id.grid_photo);
         mData = new ArrayList<Icon>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             mData.add(new Icon(R.mipmap.iv_icon_1, "图标1"));
             mData.add(new Icon(R.mipmap.iv_icon_2, "图标2"));
             mData.add(new Icon(R.mipmap.iv_icon_3, "图标3"));
