@@ -117,8 +117,8 @@ public class PushService extends Service {
             Logger.e(TAG, e.getCause().getMessage());
         }
         Bundle extras = intent.getExtras();
-        this.alias = extras.getString("alias","");
-        this.group = extras.getString("group","");
+        this.alias = extras.getString("alias", "");
+        this.group = extras.getString("group", "");
         Logger.d(TAG, "userId=" + userId);
         Logger.d(TAG, "token=" + token);
         Logger.d(TAG, "appKey=" + appKey);
@@ -141,14 +141,17 @@ public class PushService extends Service {
             PushService pushService = pushServiceWeakReference.get();
             Context mContext = pushService.getApplicationContext();
             if (msg.what == 123) {
-                Intent intent = new Intent("android.intent.action.push");
-                pushService.sendBroadcast(intent);
+                //Intent intent = new Intent("android.intent.action.push");
+                //pushService.sendBroadcast(intent);
                 //启动通知，然后在去进行广播
                 //全局通知管理者，通过获取系统服务获取
                 NotificationManager mNotificationManager = (NotificationManager) pushService.getSystemService(NOTIFICATION_SERVICE);
                 //通知栏构造器,创建通知栏样式
-                Intent it = new Intent(mContext, ListActivity.class);
-                PendingIntent pit = PendingIntent.getActivity(mContext, 0, it, 0);
+                //Intent it = new Intent(mContext, ListActivity.class);
+                Intent itBroadcast = new Intent("android.intent.action.push");
+
+                //PendingIntent pit = PendingIntent.getActivity(mContext, 0, it, 0);
+                PendingIntent pit = PendingIntent.getBroadcast(mContext, 0, itBroadcast, 0);
 
                 //设置图片,通知标题,发送时间,提示方式等属性
                 Notification.Builder mBuilder = new Notification.Builder(mContext);
