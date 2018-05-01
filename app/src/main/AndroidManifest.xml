@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-
+    <!-- 广播的权限 -->
+    <uses-permission android:name="com.asyf.app.service.PushService" />
     <application
         android:name=".application.Myapplication"
         android:allowBackup="true"
@@ -33,7 +34,29 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PdfViewerActivity" />
-        <activity android:name=".activity.RecyclerviewActivity"></activity>
+        <activity android:name=".activity.RecyclerviewActivity" />
+        <activity android:name=".activity.ServiceActivity"></activity>
+
+        <!-- 配置Service组件,同时配置一个action -->
+        <service android:name=".service.PushService">
+            <intent-filter>
+                <action android:name="com.asyf.app.service.PushService" />
+            </intent-filter>
+        </service>
+
+        <!-- 接收广播 -->
+        <receiver android:name=".receiver.MyBRReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.push"></action>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="PUSH_TOKEN"
+            android:value="123456abc" />
+        <meta-data
+            android:name="PUSH_APPKEY"
+            android:value="654321abc" />
     </application>
 
 </manifest>

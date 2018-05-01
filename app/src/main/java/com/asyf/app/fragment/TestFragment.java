@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import com.asyf.app.R;
 import com.asyf.app.activity.RecyclerviewActivity;
+import com.asyf.app.activity.ServiceActivity;
 import com.asyf.app.adapter.MyAdapter;
 import com.asyf.app.entity.Icon;
 import com.asyf.app.observe.EventBadgeItem;
+import com.asyf.app.service.PushService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class TestFragment extends Fragment {
         mData = new ArrayList<Icon>();
         //for (int i = 0; i < 10; i++) {
         mData.add(new Icon(R.mipmap.iv_icon_1, "RecyclerView"));
-        mData.add(new Icon(R.mipmap.iv_icon_2, "图标2"));
+        mData.add(new Icon(R.mipmap.iv_icon_2, "服务"));
         mData.add(new Icon(R.mipmap.iv_icon_3, "图标3"));
         mData.add(new Icon(R.mipmap.iv_icon_4, "图标4"));
         mData.add(new Icon(R.mipmap.iv_icon_5, "图标5"));
@@ -82,6 +84,10 @@ public class TestFragment extends Fragment {
                     case 0:
                         Intent intent = new Intent(activity, RecyclerviewActivity.class);
                         activity.startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(activity, ServiceActivity.class);
+                        activity.startActivity(intent1);
                         break;
                     default:
                         break;
