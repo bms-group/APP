@@ -51,14 +51,9 @@ public class PushService extends Service {
     public void onCreate() {
         super.onCreate();
         Logger.i(TAG, "onCreate方法被调用!");
-    }
-
-    //Service被启动时调用
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.i(TAG, "onStartCommand方法被调用!");
         //初始化基础数据
-        initPushData(intent);
+        //initPushData(intent);//用这种方式会导致，app被清理时报错
+        initPushData();
         boolean flag = true;
         if (StringUtils.isBlank(userId)) {
             flag = false;
@@ -78,7 +73,7 @@ public class PushService extends Service {
                 @Override
                 public void run() {
                     try {
-                        new EchoClient("192.168.1.7", 8088, handler, token, appKey, userId)
+                        new EchoClient("192.168.1.3", 8088, handler, token, appKey, userId)
                                 .setAlias(alias)
                                 .setGroup(group)
                                 .start();
@@ -88,6 +83,12 @@ public class PushService extends Service {
                 }
             }).start();
         }
+    }
+
+    //Service被启动时调用
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Logger.i(TAG, "onStartCommand方法被调用!");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -99,7 +100,7 @@ public class PushService extends Service {
     }
 
     //======================================================================私有方法
-    private void initPushData(Intent intent) {
+    private void initPushData() {
         SharedPreferences sp = getSharedPreferences("push_data", Context.MODE_PRIVATE);
         String userId = sp.getString("userId", null);
         if (StringUtils.isBlank(userId)) {
@@ -116,9 +117,9 @@ public class PushService extends Service {
         } catch (PackageManager.NameNotFoundException e) {
             Logger.e(TAG, e.getCause().getMessage());
         }
-        Bundle extras = intent.getExtras();
-        this.alias = extras.getString("alias", "");
-        this.group = extras.getString("group", "");
+        //Bundle extras = intent.getExtras();
+        //this.alias = extras.getString("alias", "");
+        //this.group = extras.getString("group", "");
         Logger.d(TAG, "userId=" + userId);
         Logger.d(TAG, "token=" + token);
         Logger.d(TAG, "appKey=" + appKey);

@@ -3,6 +3,8 @@ package com.asyf.app.application;
 import android.app.Application;
 import android.content.Intent;
 
+import com.asyf.app.common.Logger;
+
 import org.xutils.x;
 
 /**
@@ -10,6 +12,7 @@ import org.xutils.x;
  */
 
 public class Myapplication extends Application {
+    private static final String TAG = "Myapplication";
     private String name;
 
     public String getName() {
@@ -22,6 +25,7 @@ public class Myapplication extends Application {
 
     @Override
     public void onCreate() {
+        Logger.d(TAG, "Application创建============");
         super.onCreate();
         this.name = "sjajaod";
         x.Ext.init(this);
