@@ -148,6 +148,8 @@ public class PushService extends Service {
                 NotificationManager mNotificationManager = (NotificationManager) pushService.getSystemService(NOTIFICATION_SERVICE);
                 //通知栏构造器,创建通知栏样式
                 //Intent it = new Intent(mContext, ListActivity.class);
+                //点击事件出发广播，然后在广播中处理
+                //TODO 此处可以写成在AndroidManifest.xml中配置，这样就可以随便新建服务接收通知了
                 Intent itBroadcast = new Intent("android.intent.action.push");
 
                 //PendingIntent pit = PendingIntent.getActivity(mContext, 0, it, 0);
