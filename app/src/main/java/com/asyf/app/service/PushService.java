@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class PushService extends Service {
 
-    private final String TAG = "PushService";
+    private static final String TAG = "PushService";
     final MyHandler handler = new MyHandler(this);
     //private EchoClient echoClient;
     private String token;
@@ -40,6 +40,7 @@ public class PushService extends Service {
     private String alias;
     private String group;
     private Thread thread;
+    private EchoClient echoClient;
 
     //必须要实现的方法
     @Nullable
@@ -59,7 +60,7 @@ public class PushService extends Service {
     //Service被启动时调用
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.i(TAG, "onStartCommand方法被调用!");
+        Logger.i(TAG, "onStartCommand方法被调用!" + Thread.currentThread().getName());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -69,10 +70,17 @@ public class PushService extends Service {
         Logger.i(TAG, "onDestory方法被调用!");
         if (thread != null) {
             Logger.i(TAG, "关闭线程");
-            //不自动重启
-            //echoClient.setReatart(false);
+            //关闭netty
+            echoClient.stop();
             //关闭线程
             //thread.interrupt();
+            Logger.e(TAG, "thread___" + thread.isAlive());//此处是 true，说明线程未执行完毕
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Logger.e(TAG, "thread___" + thread.isAlive());//此处是false，说明10秒后线程执行完毕
         }
         super.onDestroy();
     }
@@ -102,15 +110,22 @@ public class PushService extends Service {
                 @Override
                 public void run() {
                     try {
-                        EchoClient echoClient = new EchoClient("192.168.0.105", 8088, handler, token, appKey, userId)
+                        echoClient = new EchoClient("192.168.0.105", 8088, handler, token, appKey, userId)
                                 .setAlias(alias)
                                 .setGroup(group);
                         echoClient.start();
+                        Logger.e(TAG, "thread执行到最后");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            });
+            }) {
+                @Override
+                protected void finalize() throws Throwable {
+                    super.finalize();
+                    Logger.e(TAG, "thread===================================finalize");
+                }
+            };
             thread.start();
         }
     }
@@ -149,6 +164,7 @@ public class PushService extends Service {
         private final WeakReference<PushService> pushServiceWeakReference;
 
         public MyHandler(PushService pushService) {
+            Logger.i(TAG, "弱引用构造函数");
             this.pushServiceWeakReference = new WeakReference<PushService>(pushService);
         }
 
@@ -157,6 +173,7 @@ public class PushService extends Service {
             PushService pushService = pushServiceWeakReference.get();
             Context mContext = pushService.getApplicationContext();
             if (msg.what == 123) {
+                com.asyf.app.netty.Message m = (com.asyf.app.netty.Message) msg.obj;
                 //Intent intent = new Intent("android.intent.action.push");
                 //pushService.sendBroadcast(intent);
                 //启动通知，然后在去进行广播
@@ -176,7 +193,7 @@ public class PushService extends Service {
                 //设置通知栏标题
                 mBuilder.setContentTitle("测试标题")
                         //设置通知栏显示内容
-                        .setContentText("测试内容")
+                        .setContentText("测试内容" + m.toString())
                         //设置通知栏点击意图
                         .setContentIntent(pit)
                         //通知首次出现在通知栏，带上升动画效果的

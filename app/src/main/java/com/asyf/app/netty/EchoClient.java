@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class EchoClient {
 
     private static final String TAG = "EchoClient";
+    private EventLoopGroup eventLoopGroup = null;
     private final String host;
     private final int port;
     private Handler handler;
@@ -28,7 +29,6 @@ public class EchoClient {
     private String alias;
     private String group;
     private String userId;
-    private boolean isReatart = true;
 
     public EchoClient(String host, int port, Handler handler, String token, String appKey, String userId) {
         this.host = host;
@@ -51,12 +51,17 @@ public class EchoClient {
         return this;
     }
 
-    public void setReatart(boolean reatart) {
-        isReatart = reatart;
+    public void stop() {
+        int quietPeriod = 5;
+        int timeout = 30;
+        TimeUnit timeUnit = TimeUnit.SECONDS;
+        if (eventLoopGroup != null) {
+            eventLoopGroup.shutdownGracefully(quietPeriod, timeout, timeUnit);
+        }
     }
 
     public void start() throws Exception {
-        final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        eventLoopGroup = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap(); //1创建 Bootstrap
             b.group(eventLoopGroup) //2
@@ -78,11 +83,8 @@ public class EchoClient {
             Logger.e(TAG, "失去链接");
             eventLoopGroup.shutdownGracefully().sync(); //8
             //Thread.sleep(10000);
-            Logger.e(TAG, "isReatart=" + isReatart);
-            if (isReatart) {
-                Logger.e(TAG, "准备重连");
-                //start();
-            }
+            Logger.e(TAG, "准备重连");
+            //start();
         }
     }
 

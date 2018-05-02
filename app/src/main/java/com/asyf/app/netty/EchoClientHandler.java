@@ -58,6 +58,7 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
             //收到消息的处理，返回到服务
             android.os.Message m = new android.os.Message();
             m.what = 123;
+            m.obj = message;
             handler.sendMessage(m);
         } else if ("0".equals(message.getType())) {
             Logger.e(TAG, "心跳检测：" + message.toString());
