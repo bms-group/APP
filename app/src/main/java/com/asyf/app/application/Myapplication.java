@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.asyf.app.common.Logger;
+import com.asyf.app.service.PushService;
 
 import org.xutils.x;
 
@@ -31,10 +32,13 @@ public class Myapplication extends Application {
         x.Ext.init(this);
         x.Ext.setDebug(true);
         //启动推送service
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, PushService.class);
         intent.putExtra("alias", "alias_123");
         intent.putExtra("group", "group_123");
-        intent.setAction("com.asyf.app.service.PushService");
+        //这时候会报错：
+        //IllegalArgumentException: Service Intent must be explicit
+        //经过查找相关资料，发现是因为Android5.0中service的intent一定要显性声明，当这样绑定的时候不会报错。
+        //intent.setAction("com.asyf.app.service.PushService");
         startService(intent);
     }
 }

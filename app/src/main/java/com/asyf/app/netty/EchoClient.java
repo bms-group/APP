@@ -28,6 +28,7 @@ public class EchoClient {
     private String alias;
     private String group;
     private String userId;
+    private boolean isReatart = true;
 
     public EchoClient(String host, int port, Handler handler, String token, String appKey, String userId) {
         this.host = host;
@@ -50,6 +51,10 @@ public class EchoClient {
         return this;
     }
 
+    public void setReatart(boolean reatart) {
+        isReatart = reatart;
+    }
+
     public void start() throws Exception {
         final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
@@ -63,7 +68,7 @@ public class EchoClient {
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
                             ch.pipeline()
-                                    .addLast("ping", new IdleStateHandler(0, 250, 0, TimeUnit.SECONDS))
+                                    .addLast("ping", new IdleStateHandler(0, 30, 0, TimeUnit.SECONDS))
                                     .addLast(new EchoClientHandler(handler, token, appKey, alias, group, userId));
                         }
                     });
@@ -72,9 +77,12 @@ public class EchoClient {
         } finally {
             Logger.e(TAG, "失去链接");
             eventLoopGroup.shutdownGracefully().sync(); //8
-            Thread.sleep(60000);
-            Logger.e(TAG, "准备重连");
-            start();
+            //Thread.sleep(10000);
+            Logger.e(TAG, "isReatart=" + isReatart);
+            if (isReatart) {
+                Logger.e(TAG, "准备重连");
+                //start();
+            }
         }
     }
 

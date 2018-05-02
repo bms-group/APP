@@ -46,6 +46,6 @@ public class Logger {
     }
 
     private static String getCurrentDateTime() {
-        return "asyf_log_" + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss") + " - ";
+        return "asyf_log_" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss") + " - ";
     }
 }

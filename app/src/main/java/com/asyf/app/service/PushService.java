@@ -33,11 +33,13 @@ public class PushService extends Service {
 
     private final String TAG = "PushService";
     final MyHandler handler = new MyHandler(this);
+    //private EchoClient echoClient;
     private String token;
     private String appKey;
     private String userId;
     private String alias;
     private String group;
+    private Thread thread;
 
     //必须要实现的方法
     @Nullable
@@ -51,6 +53,33 @@ public class PushService extends Service {
     public void onCreate() {
         super.onCreate();
         Logger.i(TAG, "onCreate方法被调用!");
+        startEchoClient();
+    }
+
+    //Service被启动时调用
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Logger.i(TAG, "onStartCommand方法被调用!");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    //Service被关闭之前回调
+    @Override
+    public void onDestroy() {
+        Logger.i(TAG, "onDestory方法被调用!");
+        if (thread != null) {
+            Logger.i(TAG, "关闭线程");
+            //不自动重启
+            //echoClient.setReatart(false);
+            //关闭线程
+            //thread.interrupt();
+        }
+        super.onDestroy();
+    }
+
+    //======================================================================私有方法
+
+    private void startEchoClient() {
         //初始化基础数据
         //initPushData(intent);//用这种方式会导致，app被清理时报错
         initPushData();
@@ -69,37 +98,23 @@ public class PushService extends Service {
         }
         if (flag) {
             //新的线程启动服务
-            new Thread(new Runnable() {
+            thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        new EchoClient("192.168.1.3", 8088, handler, token, appKey, userId)
+                        EchoClient echoClient = new EchoClient("192.168.0.105", 8088, handler, token, appKey, userId)
                                 .setAlias(alias)
-                                .setGroup(group)
-                                .start();
+                                .setGroup(group);
+                        echoClient.start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
+            thread.start();
         }
     }
 
-    //Service被启动时调用
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.i(TAG, "onStartCommand方法被调用!");
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    //Service被关闭之前回调
-    @Override
-    public void onDestroy() {
-        Logger.i(TAG, "onDestory方法被调用!");
-        super.onDestroy();
-    }
-
-    //======================================================================私有方法
     private void initPushData() {
         SharedPreferences sp = getSharedPreferences("push_data", Context.MODE_PRIVATE);
         String userId = sp.getString("userId", null);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.asyf.app.R;
+import com.asyf.app.service.PushService;
 
 public class ServiceActivity extends Activity {
 
@@ -27,8 +28,8 @@ public class ServiceActivity extends Activity {
         start = (Button) findViewById(R.id.btnstart);
         stop = (Button) findViewById(R.id.btnstop);
         //创建启动Service的Intent,以及Intent属性
-        final Intent intent = new Intent();
-        intent.setAction("com.asyf.app.service.PushService");
+        final Intent intent = new Intent(this, PushService.class);
+        //intent.setAction("com.asyf.app.service.PushService");
         //为两个按钮设置点击事件,分别是启动与停止service
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
