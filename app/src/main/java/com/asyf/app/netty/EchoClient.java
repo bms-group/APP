@@ -73,7 +73,7 @@ public class EchoClient {
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
                             ch.pipeline()
-                                    .addLast("ping", new IdleStateHandler(0, 30, 0, TimeUnit.SECONDS))
+                                    .addLast("ping", new IdleStateHandler(0, 300, 0, TimeUnit.SECONDS))
                                     .addLast(new EchoClientHandler(handler, token, appKey, alias, group, userId));
                         }
                     });

@@ -5,15 +5,12 @@
     tools:context="com.asyf.app.fragment.ScheduleFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="安排" />
-    <com.asyf.app.myView.MyView
-        android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:text="安排" />-->
     <com.asyf.app.myView.MyDefinedCalendar
         android:layout_width="match_parent"
-        android:layout_height="200dp"></com.asyf.app.myView.MyDefinedCalendar>
+        android:layout_height="match_parent"></com.asyf.app.myView.MyDefinedCalendar>
 
 </FrameLayout>
