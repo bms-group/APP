@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.asyf.app.myView.MyView
+        android:id="@+id/my_defined_my_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <ListView
+        android:id="@+id/my_defined_listView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"></ListView>
+</LinearLayout>
