@@ -5,42 +5,68 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.asyf.app.common.Logger;
+import com.asyf.app.util.DateUtil;
 
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * 设计：根据月份返回当月数据，回调接口设置事物，点击事件监听
+ * 当前数据传入x，y坐标返回日期或者下月上月
+ */
 public class MyView extends View {
+
     private static final String TAG = "MyView";
+    //view高度
+    private int height;
+    //view宽度
+    private int width;
+    //行高
+    private int rowHeight;
+    //每个日期位置的宽度
+    private int columnWidth;
+    //线的宽度
+    private int mStrokeWidth = 1;
+    private int mWeekSize = 14;
+    private Paint mPaint;
+    //背景画笔
+    private Paint bgPaint;
+    //日期数组
+    private String[] weekString = new String[]{"日", "一", "二", "三", "四", "五", "六"};
 
     //上横线颜色
     private int mTopLineColor = Color.parseColor("red");
     //下横线颜色
-    private int mBottomLineColor = Color.parseColor("red");
+    private int mBottomLineColor = Color.parseColor("#C0FF3E");
     //周一到周五的颜色
     private int mWeedayColor = Color.parseColor("#1FC2F3");
     //周六、周日的颜色
     private int mWeekendColor = Color.parseColor("#fa4451");
-    //线的宽度
-    private int mStrokeWidth = 4;
-    private int mWeekSize = 14;
-    private Paint paint;
+    private int mBgHeader = Color.parseColor("#AEEEEE");
+
     private DisplayMetrics mDisplayMetrics;
-    private String[] weekString = new String[]{"日", "一", "二", "三", "四", "五", "六"};
+
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mDisplayMetrics = getResources().getDisplayMetrics();
-        paint = new Paint();
+        mPaint = new Paint();
+        bgPaint = new Paint();
     }
 
-    @Override
-    public void setOnTouchListener(OnTouchListener l) {
-        super.setOnTouchListener(l);
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Logger.d(TAG, "onMeasure");
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 
@@ -58,32 +84,129 @@ public class MyView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int width = getWidth();
-        int height = getHeight();
-        //进行画上下线
-        paint.setStyle(Style.STROKE);
-        paint.setColor(mTopLineColor);
-        paint.setStrokeWidth(mStrokeWidth);
-        canvas.drawLine(0, 0, width, 0, paint);
+        Logger.d(TAG, "onDraw");
+        init();
+        drawMonth(canvas);
 
-        //画下横线
-        paint.setColor(mBottomLineColor);
-        canvas.drawLine(0, height, width, height, paint);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(mWeekSize * mDisplayMetrics.scaledDensity);
-        int columnWidth = width / 7;
         for (int i = 0; i < weekString.length; i++) {
             String text = weekString[i];
-            int fontWidth = (int) paint.measureText(text);
+            int fontWidth = (int) mPaint.measureText(text);
             int startX = columnWidth * i + (columnWidth - fontWidth) / 2;
-            int startY = (int) (height / 2 - (paint.ascent() + paint.descent()) / 2);
+            int startY = (int) (rowHeight + rowHeight / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
             if (text.indexOf("日") > -1 || text.indexOf("六") > -1) {
-                paint.setColor(mWeekendColor);
+                mPaint.setColor(mWeekendColor);
             } else {
-                paint.setColor(mWeedayColor);
+                mPaint.setColor(mWeedayColor);
             }
-            canvas.drawText(text, startX, startY, paint);
+            canvas.drawText(text, startX, startY, mPaint);
         }
+        //画日期
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.set(Calendar.DATE, 1);
+        int firstIndex = c.get(Calendar.DAY_OF_WEEK) - 1;
+        int lineNum = 1;
+        //第一行能展示的天数
+        int firstLineNum = 7 - firstIndex;
+        int dayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int shengyu = dayOfMonth - firstLineNum;
+        int lastLineNum = 0;
+        while (shengyu > 7) {
+            lineNum++;
+            shengyu -= 7;
+        }
+        if (shengyu > 0) {
+            lineNum++;
+            lastLineNum = shengyu;
+        }
+        Logger.i(TAG, "一共有" + dayOfMonth + "天,第一天的索引是：" + firstIndex + "   有" + lineNum +
+                "行，第一行" + firstLineNum + "个，最后一行" + lastLineNum + "个");
+        c.set(Calendar.DATE, 1);
+        String text = "11";
+        for (int i = 0; i < lineNum; i++) {
+            int startY = (int) (rowHeight * (i + 2) + rowHeight / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
+            if (i == 0) {
+                for (int j = 0; j < firstLineNum; j++) {
+                    text = String.valueOf(c.get(Calendar.DATE));
+                    c.add(Calendar.DATE, 1);
+                    //int startX = columnWidth * i + (columnWidth - fontWidth) / 2;
+                    int fontWidth = (int) mPaint.measureText(text);
+                    int startX = (firstIndex + j) * columnWidth + (columnWidth - fontWidth) / 2;
+                    canvas.drawText(text, startX, startY, mPaint);
+                }
+            } else if (i == lineNum - 1) {
+                for (int j = 0; j < shengyu; j++) {
+                    text = String.valueOf(c.get(Calendar.DATE));
+                    c.add(Calendar.DATE, 1);
+                    //int startX = columnWidth * i + (columnWidth - fontWidth) / 2;
+                    int fontWidth = (int) mPaint.measureText(text);
+                    int startX = j * columnWidth + (columnWidth - fontWidth) / 2;
+                    canvas.drawText(text, startX, startY, mPaint);
+                }
+            } else {
+                for (int j = 0; j < 7; j++) {
+                    text = String.valueOf(c.get(Calendar.DATE));
+                    c.add(Calendar.DATE, 1);
+                    //int startX = columnWidth * i + (columnWidth - fontWidth) / 2;
+                    int fontWidth = (int) mPaint.measureText(text);
+                    int startX = j * columnWidth + (columnWidth - fontWidth) / 2;
+                    canvas.drawText(text, startX, startY, mPaint);
+                }
+            }
+            //mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            //canvas.drawPaint(mPaint);
+        }
+    }
+
+    private void drawMonth(Canvas canvas) {
+        //背景
+        bgPaint.setColor(mBgHeader);
+        RectF rect = new RectF(0, 0, width, rowHeight);
+        canvas.drawRect(rect, bgPaint);
+        //日历头部
+        mPaint.setStyle(Style.FILL);
+        mPaint.setTextSize(mWeekSize * mDisplayMetrics.scaledDensity);
+        String left = "上一月";
+        String right = "下一月";
+        int textWidth = (int) mPaint.measureText(left);
+        mPaint.setColor(mWeedayColor);
+        int x = (width - (int) mPaint.measureText(DateUtil.formatDate(new Date(), "yyyy-MM"))) / 2;
+        canvas.drawText(left, 0, rowHeight / 2 - (mPaint.ascent() + mPaint.descent()) / 2, mPaint);
+        canvas.drawText(DateUtil.formatDate(new Date(), "yyyy-MM"), x, rowHeight / 2 - (mPaint.ascent() + mPaint.descent()) / 2, mPaint);
+        canvas.drawText(right, width - textWidth, rowHeight / 2 - (mPaint.ascent() + mPaint.descent()) / 2, mPaint);
+        canvas.drawLine(0, 0, width, 0, mPaint);
+        //画下横线
+        mPaint.setColor(mBottomLineColor);
+        canvas.drawLine(0, rowHeight, width, rowHeight, mPaint);
+    }
+
+    private void init() {
+        width = getWidth();
+        height = getHeight();
+        rowHeight = height / 8;
+        columnWidth = width / 7;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final float x = event.getX();
+        final float y = event.getY();
+        //final int viewFlags = mViewFlags;
+        final int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                Logger.d(TAG, "up---" + x + "---" + y);
+                break;
+
+            case MotionEvent.ACTION_DOWN:
+                Logger.d(TAG, "down---" + x + "---" + y);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                Logger.d(TAG, "move---" + x + "---" + y);
+                break;
+        }
+        return true;
     }
 
     /**
