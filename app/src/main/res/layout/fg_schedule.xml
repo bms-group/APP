@@ -11,6 +11,7 @@
         android:text="安排" />-->
     <com.asyf.app.myView.MyDefinedCalendar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.asyf.app.myView.MyDefinedCalendar>
+        android:layout_height="match_parent"
+        android:id="@+id/my_calendar"></com.asyf.app.myView.MyDefinedCalendar>
 
 </FrameLayout>
