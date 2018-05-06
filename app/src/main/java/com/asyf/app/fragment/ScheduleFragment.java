@@ -42,20 +42,7 @@ public class ScheduleFragment extends Fragment {
         myDefinedCalendar.setOnDateChangeListener(new MyDefinedCalendar.OnDateChangeListener() {
             @Override
             public void onDayClick(String date) {
-                Toast.makeText(getContext(), "您点击了" + date, Toast.LENGTH_SHORT).show();
-                List<String> list = new ArrayList<>();
-                list.add("qwqjhoq" + date);
-                list.add("adssd" + date);
-                list.add("第三行数据楼上的说的宏伟好红红好我好 三生三世" + date);
-                list.add("第4行数据" + date);
-                list.add("第5行数据" + date);
-                list.add("第6行数据" + date);
-                list.add("第7行数据" + date);
-                list.add("第8行数据" + date);
-                myDefinedCalendar.addListData(list);
-                Set<Integer> set = new HashSet<>();
-                set.add(Integer.valueOf(date.split("-")[2]));
-                myDefinedCalendar.addEvents(set);
+                Toast.makeText(getContext(), "您点击了" + date + "--" + myDefinedCalendar.getCurrentDate(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -63,6 +50,8 @@ public class ScheduleFragment extends Fragment {
                 Toast.makeText(getContext(), "您点击了" + date, Toast.LENGTH_SHORT).show();
             }
         });
+        String currentDate = myDefinedCalendar.getCurrentDate();
+        Toast.makeText(getContext(), currentDate, Toast.LENGTH_SHORT).show();
 
     }
 }

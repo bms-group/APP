@@ -405,6 +405,9 @@ public class MyView extends View {
 
     //==============================public ↓↓↓↓↓↓↓==============================
     public String getCurrentDate() {
+        if (currentDate == null) {
+            currentDate = Calendar.getInstance();
+        }
         return DateUtil.formatDate(currentDate.getTime(), "yyyy-MM-dd");
     }
 
