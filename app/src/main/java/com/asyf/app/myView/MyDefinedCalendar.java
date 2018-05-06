@@ -27,8 +27,6 @@ public class MyDefinedCalendar extends LinearLayout {
         super(context, attrs);
         View inflate = LayoutInflater.from(context).inflate(R.layout.my_defined_calendar, this);
         list = new ArrayList<>();
-        //要显示的数据
-        // List<String> list = {"基神", "B神", "翔神", "曹神", "J神"};
         //创建ArrayAdapter
         adapter = new ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1, list);
         //获取ListView对象，通过调用setAdapter方法为ListView设置Adapter设置适配器
@@ -41,7 +39,6 @@ public class MyDefinedCalendar extends LinearLayout {
                 //日期变化的时候清空列表数据
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                //Toast.makeText(getContext(), "您点击了" + date, Toast.LENGTH_SHORT).show();
                 if (onDateChangeListener != null)
                     onDateChangeListener.onMonthClick(date);
             }
@@ -50,18 +47,13 @@ public class MyDefinedCalendar extends LinearLayout {
             public void onDayClick(String date) {
                 adapter.clear();
                 adapter.notifyDataSetChanged();
-                //Toast.makeText(getContext(), "您点击了" + date, Toast.LENGTH_SHORT).show();
                 if (onDateChangeListener != null)
                     onDateChangeListener.onDayClick(date);
             }
         });
-        /*Set<Integer> set = new HashSet<>();
-        for (int i = 1; i < 32; i++) {
-            set.add(i);
-        }
-        myView.AddEvents(set);*/
     }
 
+    //==============================public ↓↓↓↓↓↓↓==============================
     public void addListData(List<String> list) {
         adapter.clear();
         for (String s : list) {
@@ -73,6 +65,12 @@ public class MyDefinedCalendar extends LinearLayout {
     public void addEvents(Set<Integer> set) {
         myView.AddEvents(set);
     }
+
+    public String getCurrentDate() {
+        return myView.getCurrentDate();
+    }
+
+    //==============================public ↑↑↑↑↑↑↑==============================
 
     //==============================接口 ↓↓↓↓↓↓↓==============================
     private OnDateChangeListener onDateChangeListener;

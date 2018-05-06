@@ -46,7 +46,7 @@ public class ScheduleFragment extends Fragment {
                 List<String> list = new ArrayList<>();
                 list.add("qwqjhoq" + date);
                 list.add("adssd" + date);
-                list.add("第三行数据" + date);
+                list.add("第三行数据楼上的说的宏伟好红红好我好 三生三世" + date);
                 list.add("第4行数据" + date);
                 list.add("第5行数据" + date);
                 list.add("第6行数据" + date);
