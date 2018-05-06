@@ -367,6 +367,7 @@ public class MyView extends View {
     private void toNowDate() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
+        selectDay = 0;
         currentDate = c;
         if (events != null) {
             events.clear();
