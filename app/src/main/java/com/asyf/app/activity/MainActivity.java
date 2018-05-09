@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_DEFAULT);
         bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.test, "通知").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "课程").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "提醒").setActiveColorResource(R.color.qmui_config_color_blue))
-                .addItem(new BottomNavigationItem(R.mipmap.test, "我的").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "联系人").setActiveColorResource(R.color.qmui_config_color_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.test, "消息").setActiveColorResource(R.color.qmui_config_color_blue))
                 .addItem(new BottomNavigationItem(R.mipmap.test, "测试").setActiveColorResource(R.color.qmui_config_color_blue).setBadgeItem(badgeItem))
                 .setFirstSelectedPosition(0)
                 .initialise();
@@ -144,48 +144,68 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 //显示碎片
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 //隐藏所有
-                hideAllFragment(fragmentTransaction);
+                //hideAllFragment(fragmentTransaction);
                 //Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
-                        if (homeFragment == null) {
+                        /*if (homeFragment == null) {
                             homeFragment = new HomeFragment();
                             fragmentTransaction.add(R.id.ly_content, homeFragment);
                         } else {
                             fragmentTransaction.show(homeFragment);
+                        }*/
+                        if (homeFragment == null) {
+                            homeFragment = new HomeFragment();
                         }
+                        fragmentTransaction.replace(R.id.ly_content, homeFragment);
                         break;
                     case 1:
-                        if (scheduleFragment == null) {
+                       /* if (scheduleFragment == null) {
                             scheduleFragment = new ScheduleFragment();
                             fragmentTransaction.add(R.id.ly_content, scheduleFragment);
                         } else {
                             fragmentTransaction.show(scheduleFragment);
+                        }*/
+                        if (scheduleFragment == null) {
+                            scheduleFragment = new ScheduleFragment();
                         }
+                        fragmentTransaction.replace(R.id.ly_content, scheduleFragment);
                         break;
                     case 2:
-                        if (planFragment == null) {
+                        /*if (planFragment == null) {
                             planFragment = new PlanFragment();
-                            fragmentTransaction.add(R.id.ly_content, planFragment);
+                            fragmentTransaction.replace(R.id.ly_content, planFragment);
                         } else {
                             fragmentTransaction.show(planFragment);
+                        }*/
+                        if (planFragment == null) {
+                            planFragment = new PlanFragment();
                         }
+                        fragmentTransaction.replace(R.id.ly_content, planFragment);
                         break;
                     case 3:
-                        if (myFragment == null) {
+                        /*if (myFragment == null) {
                             myFragment = new MyFragment();
                             fragmentTransaction.add(R.id.ly_content, myFragment);
                         } else {
                             fragmentTransaction.show(myFragment);
+                        }*/
+                        if (myFragment == null) {
+                            myFragment = new MyFragment();
                         }
+                        fragmentTransaction.replace(R.id.ly_content, myFragment);
                         break;
                     case 4:
-                        if (testFragment == null) {
+                        /*if (testFragment == null) {
                             testFragment = new TestFragment();
                             fragmentTransaction.add(R.id.ly_content, testFragment);
                         } else {
                             fragmentTransaction.show(testFragment);
+                        }*/
+                        if (testFragment == null) {
+                            testFragment = new TestFragment();
                         }
+                        fragmentTransaction.replace(R.id.ly_content, testFragment);
                     default:
                         Toast.makeText(MainActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
                         break;
