@@ -3,6 +3,7 @@ package com.asyf.app.activity;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.asyf.app.R;
 import com.asyf.app.common.Logger;
@@ -11,12 +12,15 @@ import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 
 public class VideoPlayerActivity extends AppCompatActivity {
-    public static final String url = null;
+    public static String url = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        url = getIntent().getStringExtra("url");
+        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+
         JZVideoPlayerStandard jzVideoPlayerStandard = findViewById(R.id.videoplayer);
         //url = "http://192.168.0.130:8080/userfiles/0a99aaaa14f04258b2d9224169e79729/files/book/2018/04/EB0D01505EFEDC6797C416686A8CA7C0.flv";
         jzVideoPlayerStandard.setUp(url, JZVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "test");

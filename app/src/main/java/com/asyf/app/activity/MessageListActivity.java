@@ -293,7 +293,7 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
                         || message.getType() == IMessage.MessageType.SEND_VIDEO) {
                     if (!TextUtils.isEmpty(message.getMediaFilePath())) {
                         Intent intent = new Intent(MessageListActivity.this, VideoPlayerActivity.class);
-                        intent.putExtra(VideoPlayerActivity.url, message.getMediaFilePath());
+                        intent.putExtra("url", message.getMediaFilePath());
                         startActivity(intent);
                     }
                 } else {
