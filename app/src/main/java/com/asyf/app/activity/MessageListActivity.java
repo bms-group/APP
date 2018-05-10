@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
@@ -25,6 +26,8 @@ import com.asyf.app.R;
 import com.asyf.app.entity.DefaultUser;
 import com.asyf.app.entity.MyMessage;
 import com.asyf.app.myView.ChatView;
+import com.asyf.app.receiver.MyBRReceiver;
+import com.asyf.app.service.PushService;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -63,6 +66,22 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //handler
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                com.asyf.app.netty.Message m = (com.asyf.app.netty.Message) msg.obj;
+                MyMessage message = new MyMessage(m.getMsg(), IMessage.MessageType.RECEIVE_TEXT);
+                message.setUserInfo(new DefaultUser("1", "Ironman", "ironman"));
+                message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+
+                mAdapter.addToStart(message, true);
+            }
+        };
+        MyBRReceiver.h.put("user", handler);
+        PushService.h.put("user", handler);
+        //handler
         mContext = this;
         setContentView(R.layout.chat_activity);
 
@@ -71,7 +90,8 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
 
         mChatView = (ChatView) findViewById(R.id.chat_view);
         mChatView.initModule();
-        mChatView.setTitle("Deadpool");
+        String name = getIntent().getStringExtra("name");
+        mChatView.setTitle(name);
         mData = getMessages();
         initMsgAdapter();
 
@@ -88,6 +108,7 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
                 message.setUserInfo(new DefaultUser("1", "Ironman", "ironman"));
                 message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                 mAdapter.addToStart(message, true);
+
                 return true;
             }
 

@@ -23,6 +23,8 @@ import com.asyf.app.netty.EchoClient;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -31,6 +33,7 @@ import java.util.UUID;
 
 public class PushService extends Service {
 
+    public static final Map<String, Handler> h = new HashMap();
     private static final String TAG = "PushService";
     final MyHandler handler = new MyHandler(this);
     //private EchoClient echoClient;
@@ -110,7 +113,7 @@ public class PushService extends Service {
                 @Override
                 public void run() {
                     try {
-                        echoClient = new EchoClient("192.168.0.105", 8088, handler, token, appKey, userId)
+                        echoClient = new EchoClient("192.168.1.3", 8088, handler, token, appKey, userId)
                                 .setAlias(alias)
                                 .setGroup(group);
                         echoClient.start();
@@ -210,6 +213,13 @@ public class PushService extends Service {
                         .setSmallIcon(R.drawable.qmui_icon_checkmark);
                 //发起通知
                 mNotificationManager.notify(1212, mBuilder.build());
+                if (h.get("user") != null) {
+                    Handler handler = h.get("user");
+                    android.os.Message m2 = new android.os.Message();
+                    m2.what = 123;
+                    m2.obj = m;
+                    handler.sendMessage(m2);
+                }
             }
 
         }
