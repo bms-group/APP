@@ -62,6 +62,8 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //gson
     compile group: 'com.google.code.gson', name: 'gson', version: '2.6'
-
-
+    //聊天ui插件,聊天插件，MessageList 使用
+    compile 'cn.jiguang.imui:imui:0.1.0'
+    //聊天界面输入框组件ChatInput
+    compile 'cn.jiguang.imui:chatinput:0.1.0'
 }
