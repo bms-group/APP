@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import com.asyf.app.R;
 
-public class MyFragment extends Fragment {
+public class MessageFragment extends Fragment {
 
     private String content = "12ss";
 
-    public MyFragment() {
+    public MessageFragment() {
 
     }
 

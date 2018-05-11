@@ -28,7 +28,7 @@ import cn.jiguang.imui.messages.MessageList;
 import cn.jiguang.imui.messages.MsgListAdapter;
 
 
-public class PlanFragment extends Fragment {
+public class ContactFragment extends Fragment {
 
     private ListView listView;
     private List<Contact> contacts;
