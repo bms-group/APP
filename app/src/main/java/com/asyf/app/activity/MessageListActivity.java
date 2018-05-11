@@ -79,8 +79,10 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
                 mAdapter.addToStart(message, true);
             }
         };
-        MyBRReceiver.h.put("user", handler);
-        PushService.h.put("user", handler);
+        Intent intent = getIntent();
+        String userId = intent.getStringExtra("userId");
+        MyBRReceiver.h.put(userId, handler);
+        PushService.h.put(userId, handler);
         //handler
         mContext = this;
         setContentView(R.layout.chat_activity);
@@ -92,6 +94,7 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
         mChatView.initModule();
         String name = getIntent().getStringExtra("name");
         mChatView.setTitle(name);
+        //聊天记录
         mData = getMessages();
         initMsgAdapter();
 

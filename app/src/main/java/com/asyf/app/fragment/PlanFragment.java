@@ -62,7 +62,7 @@ public class PlanFragment extends Fragment {
                 String name = contacts.get(position).getName();
                 Toast.makeText(mContext, "您点击了" + contacts.get(position).getName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), MessageListActivity.class);
-                intent.putExtra("name", name);
+                intent.putExtra("userId", "userId123");
                 startActivity(intent);
             }
         });

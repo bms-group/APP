@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 
 import com.asyf.app.R;
 import com.asyf.app.activity.ListActivity;
+import com.asyf.app.activity.MessageListActivity;
 import com.asyf.app.common.Logger;
 import com.asyf.app.netty.EchoClient;
 
@@ -25,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -213,8 +215,48 @@ public class PushService extends Service {
                         .setSmallIcon(R.drawable.qmui_icon_checkmark);
                 //发起通知
                 mNotificationManager.notify(1212, mBuilder.build());
-                if (h.get("user") != null) {
+                /*if (h.get("user") != null) {
                     Handler handler = h.get("user");
+                    android.os.Message m2 = new android.os.Message();
+                    m2.what = 123;
+                    m2.obj = m;
+                    handler.sendMessage(m2);
+                }*/
+            } else if (msg.what == 10003) {
+                com.asyf.app.netty.Message m = (com.asyf.app.netty.Message) msg.obj;
+                //全局通知管理者，通过获取系统服务获取
+                NotificationManager mNotificationManager = (NotificationManager) pushService.getSystemService(NOTIFICATION_SERVICE);
+                //通知栏构造器,创建通知栏样式
+                Intent it = new Intent(mContext, MessageListActivity.class);
+                //点击事件出发广播，然后在广播中处理
+                it.putExtra("userId", m.getUserId());
+                PendingIntent pit = PendingIntent.getActivity(mContext, 0, it, 0);
+                //PendingIntent pit = PendingIntent.getBroadcast(mContext, 0, itBroadcast, 0);
+
+                //设置图片,通知标题,发送时间,提示方式等属性
+                Notification.Builder mBuilder = new Notification.Builder(mContext);
+                //设置通知栏标题
+                mBuilder.setContentTitle("测试标题" + m.getUserId())
+                        //设置通知栏显示内容
+                        .setContentText("测试内容" + m.getMsg())
+                        //设置通知栏点击意图
+                        .setContentIntent(pit)
+                        //通知首次出现在通知栏，带上升动画效果的
+                        .setTicker("测试通知来啦")
+                        //通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
+                        .setWhen(System.currentTimeMillis())
+                        //设置该通知优先级
+                        .setPriority(Notification.PRIORITY_DEFAULT)
+                        //设置这个标志当用户单击面板就可以让通知将自动取消
+                        .setAutoCancel(true)
+                        //使用当前的用户默认设置
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        //设置通知小ICON(应用默认图标)
+                        .setSmallIcon(R.drawable.qmui_icon_checkmark);
+                //发起通知
+                mNotificationManager.notify(new Random().nextInt(10000), mBuilder.build());
+                if (h.get(m.getUserId()) != null) {
+                    Handler handler = h.get(m.getUserId());
                     android.os.Message m2 = new android.os.Message();
                     m2.what = 123;
                     m2.obj = m;
