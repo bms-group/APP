@@ -26,8 +26,10 @@ import com.asyf.app.R;
 import com.asyf.app.entity.DefaultUser;
 import com.asyf.app.entity.MyMessage;
 import com.asyf.app.myView.ChatView;
+import com.asyf.app.netty.JsonUtil;
 import com.asyf.app.receiver.MyBRReceiver;
 import com.asyf.app.service.PushService;
+import com.asyf.app.util.MessageUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -95,7 +97,7 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
         String name = getIntent().getStringExtra("name");
         mChatView.setTitle(name);
         //聊天记录
-        mData = getMessages();
+        mData = getMessages(userId);
         initMsgAdapter();
 
         mChatView.setKeyboardChangedListener(this);
@@ -272,9 +274,15 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
         }
     }
 
-    private List<MyMessage> getMessages() {
+    private List<MyMessage> getMessages(String userId) {
         List<MyMessage> list = new ArrayList<>();
-        Resources res = getResources();
+        List<com.asyf.app.netty.Message> message = MessageUtil.getMessage(userId);
+        for (com.asyf.app.netty.Message m : message) {
+            MyMessage ms = new MyMessage(m.getMsg(), IMessage.MessageType.RECEIVE_TEXT);
+            ms.setUserInfo(new DefaultUser("0", "DeadPool", "deadpool"));
+            list.add(ms);
+        }
+        /*Resources res = getResources();
         String[] messages = res.getStringArray(R.array.messages_array);
         for (int i = 0; i < 10; i++) {
             MyMessage message;
@@ -287,7 +295,7 @@ public class MessageListActivity extends Activity implements ChatView.OnKeyboard
             }
             message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
             list.add(message);
-        }
+        }*/
         return list;
     }
 

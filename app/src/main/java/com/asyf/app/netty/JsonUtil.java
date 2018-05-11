@@ -2,6 +2,9 @@ package com.asyf.app.netty;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 public class JsonUtil {
 
     public static <T> String toJson(T t) {
@@ -22,5 +25,11 @@ public class JsonUtil {
         System.out.println(json);
         Message m = JsonUtil.fromJson(json, Message.class);
         System.out.println(m);
+    }
+
+    public static <T> List<T> toJson(String json, Type type) {
+        Gson gson = new Gson();
+        List<T> list = gson.fromJson(json, type);
+        return list;
     }
 }

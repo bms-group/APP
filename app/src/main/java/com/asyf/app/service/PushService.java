@@ -109,17 +109,23 @@ public class PushService extends Service {
             flag = false;
             Logger.e(TAG, "appKey 不能为空");
         }
+        if (echoClient != null) {
+            echoClient.stop();
+        }
         if (flag) {
             //新的线程启动服务
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        echoClient = new EchoClient("192.168.1.3", 8088, handler, token, appKey, userId)
+                        echoClient = new EchoClient("192.168.0.131", 8088, handler, token, appKey, userId)
                                 .setAlias(alias)
                                 .setGroup(group);
                         echoClient.start();
                         Logger.e(TAG, "thread执行到最后");
+                        Thread.sleep(10000);
+                        Logger.e(TAG, "重启netty");
+                        startEchoClient();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

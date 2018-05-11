@@ -3,6 +3,7 @@ package com.asyf.app.netty;
 import android.os.Handler;
 
 import com.asyf.app.common.Logger;
+import com.asyf.app.util.MessageUtil;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -67,7 +68,10 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
             android.os.Message m = new android.os.Message();
             m.what = 10003;
             m.obj = message;
-            handler.sendMessage(m);
+            MessageUtil.saveMessage(message);
+            if (handler != null) {
+                handler.sendMessage(m);
+            }
         } else {
             //未知类型的消息，不处理
             Logger.e(TAG, "收到了未知类型的数据,message=" + message);
